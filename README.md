@@ -210,6 +210,59 @@ python demo_layout.py --model_path ./hf_model --save_dir ./results \
 - 🤗 Support for Hugging Face Transformers for easier integration
 
 
+## ⚡ONNX Export and inference
+
+### Onnxruntime - Optimum - Export & usage
+
+```bash
+# Export onnx fp32
+python onnx_export.py --output_dir ./onnx_models/Dolphin-1.5_onnx
+# Export onnx fp16
+python onnx_export.py --output_dir ./onnx_models/Dolphin-1.5_onnx --fp16
+
+# Inference
+python run_onnx_inference \
+    --onnx_model_path ./onnx_models/Dolphin-1.5_onnx_fp16 \
+    --image_path demo/element_imgs/table.jpg \
+    --prompt "Parse the table in the image."
+
+# Demo
+python demo_page_onnx.py --onnx_model_path ./onnx_models/Dolphin-1.5_onnx_fp16 --input_path demo/page_imgs/page_6.pdf --save_dir results-dir --max_batch_size 4
+
+# Optional: onnxsim - model optimization
+
+# Install onnxsim
+pip install onnxsim
+
+# Run onnxsim for all three onnx models
+onnxsim <model/path>.onnx <output/path>.onnx
+```
+
+
+## ⚡OpenVINO Export and inference
+
+### OpenVINO - Optimum-intel - Export & usage
+
+```bash
+# Export onnx fp32
+python ov_export.py --output_dir ./ov_models/Dolphin-1.5_ov
+# Export onnx fp16
+python ov_export.py --output_dir ./ov_models/Dolphin-1.5_ov --fp16
+
+# Inference
+python ov_run_inference.py \
+    --onnx_model_path ./ov_models/Dolphin-1.5_ov_fp16 \
+    --image_path ./demo/element_imgs/table.jpg \
+    --prompt "Parse the table in the image." \
+    --device GPU
+
+# Demo
+python ov_demo_page.py --onnx_model_path ./ov_models/Dolphin-1.5_ov_fp16 --input_path demo/page_imgs/page_6.pdf --save_dir results-dir --max_batch_size 4  --device GPU
+
+```
+
+
+
 ## 📮 Notice
 **Call for Bad Cases:** If you have encountered any cases where the model performs poorly, we would greatly appreciate it if you could share them in the issue. We are continuously working to optimize and improve the model.
 
